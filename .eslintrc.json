@@ -1,0 +1,55 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": ["airbnb-base", "prettier"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "prettier"
+    ],
+    "settings": {
+      "import/resolver":{
+        "typescript":{}//resolve as importações .ts
+      }
+    },
+    "rules": {
+      "prettier/prettier":"error",
+      "import/extensions":[
+        "error",
+        "ignorePackages",
+        {
+          "ts":"never" //remove a necessidade de importar com o nome da extensão
+                        //ex. ./index.ts ,pode ser somente index
+        }
+      ],
+      "import/order":[ //ordenar as importações
+        "error",
+        {
+          "groups":["builtin", "external", "internal", "parent", "sibling", "index"],
+          "alphabetize":{"order":"asc", "caseInsensitive":true },
+          "newlines-between":"always"
+        }
+      ],
+      "@typescript-eslint/naming-convention":[
+        "error",
+        {
+          "selector":"interface",
+          "format":["PascalCase"],
+          "custom":{
+            "regex":"^I[A-Z]",
+            "match":true
+          }
+        }
+      ],
+      "no-console":"off",
+      "no-underscore-dangle":"off",
+      "camelcase":"off",
+      "import/no-import-module-exports":false
+    }
+}
