@@ -51,5 +51,6 @@
       "no-underscore-dangle":"off",
       "camelcase":"off",
       "import/no-import-module-exports":false
+
     }
 }
