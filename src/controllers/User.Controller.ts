@@ -64,6 +64,46 @@ export class UserController {
     }
   }
 
+  public async updateUserController(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { name, email, password, image, updated_at }: IUser = req.body;
+
+      let cryptPassword = "";
+
+      const userPassword = await userService.findUserByIdService(Number(id));
+      const passwordToString = String(userPassword.password);
+
+      const passwordToCompare = await bcrypt.compare(
+        password,
+        passwordToString,
+      );
+      console.log(passwordToCompare);
+
+      if (passwordToCompare || password === "") {
+        cryptPassword = passwordToString;
+      } else {
+        cryptPassword = await bcrypt.hash(password, 8);
+      }
+      const update = new Date();
+      const result = await userService.updateUserService(Number(id), {
+        name,
+        email,
+        password: cryptPassword,
+        image,
+        updated_at: update.toISOString(),
+      });
+
+      return res.status(200).send({
+        result,
+        message: "User updated successfully",
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).send({ message: "Internal server error" });
+    }
+  }
+
   public async deleteUserController(req: Request, res: Response) {
     try {
       const { id } = req.params;

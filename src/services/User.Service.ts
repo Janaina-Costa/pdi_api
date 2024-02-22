@@ -32,6 +32,21 @@ class UserService {
     return { ...props };
   }
 
+  public async updateUserService(id: number, { ...props }: IUser) {
+    const pool = await connectDataBase();
+    await pool
+      ?.request()
+      .input("id", dbSql.Int, id)
+      .input("name", dbSql.VarChar, props.name)
+      .input("email", dbSql.VarChar, props.email)
+      .input("password", dbSql.VarChar, props.password)
+      .input("image", dbSql.Text, props.image)
+      .input("updatedAt", dbSql.DateTime, new Date())
+      .query(query.update);
+
+    return { ...props };
+  }
+
   public async deleteUserService(id: number) {
     const pool = await connectDataBase();
     await pool?.request().input("id", dbSql.Int, id).query(query.delete);
