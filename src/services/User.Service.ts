@@ -5,7 +5,18 @@ class UserService {
   public async findUsersService() {
     const pool = await connectDataBase();
     const result = await pool?.query(query.findAll);
+
     return result?.recordset;
+  }
+
+  public async findUserByIdService(id: number) {
+    const pool = await connectDataBase();
+    const result: any = await pool
+      ?.request()
+      .input("id", dbSql.Int, id)
+      .query(query.findById);
+
+    return result?.recordsets[0][0];
   }
 
   public async createUerService({ ...props }: IUser) {
@@ -19,6 +30,11 @@ class UserService {
       .query(query.create);
 
     return { ...props };
+  }
+
+  public async deleteUserService(id: number) {
+    const pool = await connectDataBase();
+    await pool?.request().input("id", dbSql.Int, id).query(query.delete);
   }
 }
 

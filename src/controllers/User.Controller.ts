@@ -11,8 +11,27 @@ export class UserController {
       if (!user) {
         return res.status(404).send({ message: "User not found" });
       }
+      user.map((user) => (user.password = String(user.password)));
 
       return res.status(200).send(user);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).send({ message: "Internal server error" });
+    }
+  }
+
+  public async findUserByIdController(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const user: IUser = await userService.findUserByIdService(Number(id));
+
+      if (!user) {
+        return res.status(404).send({ message: "User not found" });
+      }
+      const passwordToString = String(user.password);
+
+      return res.status(200).send({ ...user, password: passwordToString });
     } catch (err) {
       console.log(err);
       return res.status(500).send({ message: "Internal server error" });
@@ -25,7 +44,7 @@ export class UserController {
       let cryptPassword = "";
 
       if (password) {
-        cryptPassword = await bcrypt.hash(password, 10);
+        cryptPassword = await bcrypt.hash(password, 8);
       }
 
       const result = await userService.createUerService({
@@ -39,6 +58,19 @@ export class UserController {
         result,
         message: "User created successfully",
       });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).send({ message: "Internal server error" });
+    }
+  }
+
+  public async deleteUserController(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      await userService.deleteUserService(Number(id));
+
+      return res.status(200).send({ message: "User deleted successfully" });
     } catch (err) {
       console.log(err);
       return res.status(500).send({ message: "Internal server error" });

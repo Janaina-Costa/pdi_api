@@ -4,9 +4,9 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/users", userController.findUsersController);
-router.get("/user/:id");
+router.get("/user/:id", userController.findUserByIdController);
 router.post("/user/create", userController.createUserController);
 router.put("/user/:id");
-router.delete("/user/:id");
+router.delete("/user/delete/:id", userController.deleteUserController);
 
 export default router;
