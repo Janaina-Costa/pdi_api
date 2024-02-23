@@ -12,6 +12,8 @@ const {
   SQL_SERVER,
 } = process.env;
 
+export const SECRET_KEY = process.env.SECRET_KEY || "";
+
 export const serverConfig = {
   port: PORT,
   host: HOST,
