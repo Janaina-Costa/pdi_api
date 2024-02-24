@@ -20,7 +20,6 @@ export class UserController {
     const { id } = req.params;
 
     const user: IUser = await userService.findUserByIdService(Number(id));
-    console.log(user);
 
     if (!user) {
       throw new NotFound("User not found");
