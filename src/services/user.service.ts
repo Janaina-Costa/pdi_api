@@ -1,7 +1,6 @@
-import { connectDataBase, dbSql } from "database/db";
-import query from "database/db.query";
-import { UserRepository } from "repositories/userRepository";
+import { UserRepository } from "repositories/user.repository";
 import { IUser } from "types/interfaces/user";
+
 class UserService {
   async findUsersService() {
     const client = new UserRepository();

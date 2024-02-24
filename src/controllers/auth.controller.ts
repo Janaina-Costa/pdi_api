@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userAuthenticateService } from "services/Auth.Service";
+import { userAuthenticateService } from "services/auth.service";
 import { IUser } from "types/interfaces/user";
 import bcrypt from "bcrypt";
 import { SECRET_KEY } from "settings";
@@ -38,7 +38,6 @@ class AuthUserController {
         userData.id,
         secret,
       );
-      console.log(token);
 
       return res.status(200).send({
         userLogged,

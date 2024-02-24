@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userService } from "services/User.Service";
+import { userService } from "services/user.service";
 import { IUser } from "types/interfaces/user";
 import bcrypt from "bcrypt";
 
@@ -75,7 +75,6 @@ export class UserController {
         password,
         passwordToString,
       );
-      console.log(passwordToCompare);
 
       if (passwordToCompare || password === "") {
         cryptPassword = passwordToString;
