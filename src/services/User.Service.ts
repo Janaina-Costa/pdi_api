@@ -1,4 +1,4 @@
-import { UserRepository } from "repositories/user.repository";
+import { UserRepository } from "repositories/User.Repository";
 import { IUser } from "types/interfaces/user";
 
 class UserService {
@@ -10,6 +10,10 @@ class UserService {
   async findUserByIdService(id: number) {
     const client = new UserRepository();
     return await client.findUserByIdRepository(id);
+  }
+  async findUserByEmailService(email: string) {
+    const client = new UserRepository();
+    return await client.findOneUserRepository(email);
   }
 
   async createUerService({ ...props }: IUser) {

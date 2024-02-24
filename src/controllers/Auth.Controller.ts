@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userAuthenticateService } from "services/auth.service";
+import { userAuthenticateService } from "services/Auth.Service";
 import { IUser } from "types/interfaces/user";
 import bcrypt from "bcrypt";
 import { SECRET_KEY } from "settings";
