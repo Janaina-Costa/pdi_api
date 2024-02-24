@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { userService } from "services/User.Service";
 import { IUser } from "types/interfaces/user";
 import bcrypt from "bcrypt";
-import { convertToString } from "util/convertToString";
 import { ApiError, BadRequestError, NotFound } from "errors/ApiErrors";
 
 export class UserController {
@@ -12,7 +11,7 @@ export class UserController {
     if (!user) {
       throw new NotFound("Users not found");
     }
-    user.map((user) => (user.password = convertToString(user.password)));
+    user.map((user) => (user.password = String(user.password)));
 
     return res.status(200).send(user);
   }
@@ -26,7 +25,7 @@ export class UserController {
     if (!user) {
       throw new NotFound("User not found");
     }
-    const passwordToString = convertToString(user.password);
+    const passwordToString = String(user.password);
 
     return res.status(200).send({ ...user, password: passwordToString });
   }
@@ -64,7 +63,7 @@ export class UserController {
 
     const user = await userService.findUserByIdService(Number(id));
 
-    const passwordToString = convertToString(user.password);
+    const passwordToString = String(user.password);
 
     if (!password) {
       password = passwordToString;
