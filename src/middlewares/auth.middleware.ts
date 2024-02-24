@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { userService } from "services/user.service";
+import { userService } from "services/User.Service";
 import { SECRET_KEY } from "settings";
 import { IUser } from "types/interfaces/user";
 
@@ -37,7 +37,7 @@ export const authMiddleware = (
     jwt.verify(token, secret, async (error, decoded) => {
       if (error) {
         console.log(`Error: ${error}`);
-        return res.status(401).send({ message: "Token has expired" });
+        return res.status(401).send({ message: "Invalid token" });
       }
 
       const { id } = decoded as IJWTPayload;
