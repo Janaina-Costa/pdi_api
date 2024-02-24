@@ -1,8 +1,9 @@
-export interface IUser {
+type User = {
   id?: number;
   name: string;
   email: string;
   password: string;
   image?: string;
-  updated_at?: string;
-}
+  createdAt?: Date;
+  updatedAt?: Date;
+};

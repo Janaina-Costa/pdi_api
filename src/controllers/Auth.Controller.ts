@@ -7,7 +7,7 @@ import { SECRET_KEY } from "settings";
 const secret = SECRET_KEY;
 
 class AuthUserController {
-  public async loginUserController(req: Request, res: Response) {
+  async loginUserController(req: Request, res: Response) {
     try {
       const user: IUser = req.body;
       const userData = await userAuthenticateService.loginService(user.email);

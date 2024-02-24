@@ -4,7 +4,7 @@ import { IUser } from "types/interfaces/user";
 import bcrypt from "bcrypt";
 
 export class UserController {
-  public async findUsersController(req: Request, res: Response) {
+  async findUsersController(req: Request, res: Response) {
     try {
       const user = await userService.findUsersService();
 
@@ -20,10 +20,9 @@ export class UserController {
     }
   }
 
-  public async findUserByIdController(req: Request, res: Response) {
+  async findUserByIdController(req: Request, res: Response) {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
-
       const user: IUser = await userService.findUserByIdService(Number(id));
 
       if (!user) {
@@ -38,11 +37,11 @@ export class UserController {
     }
   }
 
-  public async createUserController(req: Request, res: Response) {
-    try {
-      const { name, email, password, image }: IUser = req.body;
-      let cryptPassword = "";
+  async createUserController(req: Request, res: Response) {
+    const { name, email, password, image }: IUser = req.body;
+    let cryptPassword = "";
 
+    try {
       if (password) {
         cryptPassword = await bcrypt.hash(password, 8);
       }
@@ -64,13 +63,11 @@ export class UserController {
     }
   }
 
-  public async updateUserController(req: Request, res: Response) {
+  async updateUserController(req: Request, res: Response) {
+    const { id } = req.params;
+    const { name, email, password, image, updated_at }: IUser = req.body;
+    let cryptPassword = "";
     try {
-      const { id } = req.params;
-      const { name, email, password, image, updated_at }: IUser = req.body;
-
-      let cryptPassword = "";
-
       const userPassword = await userService.findUserByIdService(Number(id));
       const passwordToString = String(userPassword.password);
 
@@ -104,10 +101,9 @@ export class UserController {
     }
   }
 
-  public async deleteUserController(req: Request, res: Response) {
+  async deleteUserController(req: Request, res: Response) {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
-
       await userService.deleteUserService(Number(id));
 
       return res.status(200).send({ message: "User deleted successfully" });
