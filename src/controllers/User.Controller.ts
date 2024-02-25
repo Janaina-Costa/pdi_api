@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { userService } from "services/User.Service";
 import { IUser } from "types/interfaces/user";
 import bcrypt from "bcrypt";
-import { ApiError, BadRequestError, NotFound } from "errors/ApiErrors";
+import { ApiError, NotFound } from "errors/ApiErrors";
 
 export class UserController {
   async findUsersController(req: Request, res: Response) {
@@ -68,13 +68,9 @@ export class UserController {
       password = passwordToString;
     }
 
-    if (password.length > 12 || password.length < 8) {
-      throw new BadRequestError("Password must be between 8 and 12 characters");
-    }
-
     const passwordToCompare = await bcrypt.compare(password, passwordToString);
 
-    if (passwordToCompare || !password) {
+    if (passwordToCompare) {
       cryptPassword = passwordToString;
     } else {
       cryptPassword = await bcrypt.hash(password, 8);

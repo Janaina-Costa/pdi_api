@@ -1,7 +1,10 @@
 import { userController } from "controllers/User.Controller";
 import { Router } from "express";
 import { authMiddleware } from "middlewares/auth.middleware";
-import { userValidationMiddleware } from "middlewares/user.validation.middleware";
+import {
+  userValidationMiddleware,
+  validateUserUpdateMiddleware,
+} from "middlewares/user.validation.middleware";
 
 const router = Router();
 
@@ -15,6 +18,7 @@ router.post(
 router.put(
   "/user/update/:id",
   authMiddleware,
+  validateUserUpdateMiddleware,
   userController.updateUserController,
 );
 router.delete(

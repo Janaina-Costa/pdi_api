@@ -1,34 +1,87 @@
 import { NextFunction, Request, Response } from "express";
-import { BadRequestError } from "errors/ApiErrors";
-import { IUser } from "types/interfaces/user";
+
+import { z } from "zod";
 
 export const userValidationMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const user: IUser = req.body;
-  const error = [];
+  const userSchema = z.object({
+    name: z
+      .string()
+      .refine((obj) => obj.length > 3, {
+        message: "Name must be greater than 3 characters",
+      }),
 
-  if (!user.name) {
-    error.push("name");
-  }
-  if (!user.email) {
-    error.push("email");
-  }
-  if (!user.password) {
-    error.push("password");
+    email: z.string().email({ message: "Invalid email address" }),
+
+    password: z
+      .string()
+      .refine((obj) => obj.length >= 8 && obj.length <= 12, {
+        message: "Password must be between 8 and 12 characters",
+      }),
+  });
+
+  try {
+    userSchema.parse(req.body);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      console.log(err.issues);
+
+      return res
+        .status(400)
+        .json({
+          message: err.issues.map((issue) =>
+            issue.message === "Required"
+              ? `The field ${issue.path
+                  .map((path) => path)
+                  .join(" ")} is required`
+              : issue.message,
+          ),
+        });
+    }
   }
 
-  if (error.length <= 0) {
-    return next();
+  return next();
+};
+
+export const validateUserUpdateMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const userSchema = z.object({
+    name: z
+      .string()
+      .refine((obj) => obj.length >= 3, {
+        message: "Name must be greater than 3 characters",
+      })
+      .optional(),
+
+    email: z.string().email({ message: "Invalid email address" }).optional(),
+
+    password: z
+      .string()
+      .refine((obj) => obj.length >= 8 && obj.length <= 12, {
+        message: "Password must be between 8 and 12 characters",
+      })
+      .optional(),
+
+    image: z.string().optional(),
+  });
+  try {
+    userSchema.parse(req.body);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      console.log(err.issues);
+
+      return res
+        .status(400)
+        .json({ message: err.issues.map((issue) => issue.message) });
+    }
   }
-  if (error.length > 1) {
-    return res
-      .status(400)
-      .send({ message: `Empty ${error} data are required` });
-  }
-  return res.status(400).send({ message: `Empty ${error} data is required` });
+  return next();
 };
 
 export const validateLoginMiddleware = (
@@ -36,21 +89,28 @@ export const validateLoginMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  const user: IUser = req.body;
-  const error = [];
-  if (!user.email) {
-    error.push("email");
+  const userSchema = z.object({
+    email: z.string(),
+    password: z.string(),
+  });
+
+  try {
+    userSchema.parse(req.body);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      console.log(err.issues);
+
+      return res
+        .status(400)
+        .json({
+          message: err.issues.map((issue) =>
+            issue.message === "Required"
+              ? "Email and password are required"
+              : issue.message,
+          ),
+        });
+    }
   }
-  if (!user.password) {
-    error.push("password");
-  }
-  if (error.length === 0) {
-    return next();
-  }
-  if (error.length > 1) {
-    return res
-      .status(400)
-      .send({ message: `Empty ${error} data are required` });
-  }
-  return res.status(400).send({ message: `Empty ${error} data is required` });
+
+  return next();
 };
