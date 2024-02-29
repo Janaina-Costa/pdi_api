@@ -8,10 +8,10 @@ import {
 
 const router = Router();
 
-router.get("/users", authMiddleware, userController.findUsersController);
+router.get("/users", userController.findUsersController);
 router.get("/user/:id", authMiddleware, userController.findUserByIdController);
 router.post(
-  "/user/create",
+  "/user",
   userValidationMiddleware,
   userController.createUserController,
 );
