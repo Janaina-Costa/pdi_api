@@ -32,6 +32,7 @@ class AuthUserController {
       id: userData.id,
       name: userData.name,
       email: userData.email,
+      image: userData.image,
     };
 
     const token = await userAuthenticateService.generateTokenService(

@@ -26,7 +26,7 @@ export class UserController {
     }
     const passwordToString = String(user.password);
 
-    return res.status(200).send({ ...user, password: passwordToString });
+    return res.status(200).send({ ...user, password: "" });
   }
 
   async createUserController(req: Request, res: Response) {
@@ -50,6 +50,7 @@ export class UserController {
     });
 
     return res.status(201).send({
+      password: "",
       result,
       message: "User created successfully",
     });
@@ -86,6 +87,7 @@ export class UserController {
     });
 
     return res.status(200).send({
+      _password: "",
       result,
       message: "User updated successfully",
     });
