@@ -5,8 +5,8 @@ import bcrypt from "bcrypt";
 import { ApiError, NotFound } from "errors/ApiErrors";
 
 export class UserController {
-  async findUsersController(req: Request, res: Response) {
-    const user = await userService.findUsersService();
+  async findUsers(req: Request, res: Response) {
+    const user = await userService.findUsers();
 
     if (!user) {
       throw new NotFound("Users not found");
@@ -16,10 +16,10 @@ export class UserController {
     return res.status(200).send(user);
   }
 
-  async findUserByIdController(req: Request, res: Response) {
+  async findUserById(req: Request, res: Response) {
     const { id } = req.params;
 
-    const user: IUser = await userService.findUserByIdService(Number(id));
+    const user: IUser = await userService.findUserById(Number(id));
 
     if (!user) {
       throw new NotFound("User not found");
@@ -29,20 +29,20 @@ export class UserController {
     return res.status(200).send({ ...user, password: "" });
   }
 
-  async createUserController(req: Request, res: Response) {
+  async createUser(req: Request, res: Response) {
     const { name, email, password, image }: IUser = req.body;
     let cryptPassword = "";
 
     if (password) {
       cryptPassword = await bcrypt.hash(password, 8);
     }
-    const emailAlreadyExists = await userService.findUserByEmailService(email);
+    const emailAlreadyExists = await userService.findUserByEmail(email);
 
     if (emailAlreadyExists) {
       throw new ApiError("Email already exists", 409);
     }
 
-    const result = await userService.createUerService({
+    const result = await userService.createUer({
       name,
       email,
       password: cryptPassword,
@@ -56,12 +56,12 @@ export class UserController {
     });
   }
 
-  async updateUserController(req: Request, res: Response) {
+  async updateUser(req: Request, res: Response) {
     const { id } = req.params;
     let { name, email, password, image }: IUser = req.body;
     let cryptPassword = "";
 
-    const user = await userService.findUserByIdService(Number(id));
+    const user = await userService.findUserById(Number(id));
 
     const passwordToString = String(user.password);
 
@@ -78,7 +78,7 @@ export class UserController {
     }
 
     const update = new Date();
-    const result = await userService.updateUserService(Number(id), {
+    const result = await userService.updateUser(Number(id), {
       name: name ? name : user.name,
       email: email ? email : user.email,
       password: password ? cryptPassword : user.password,
@@ -93,17 +93,22 @@ export class UserController {
     });
   }
 
-  async deleteUserController(req: Request, res: Response) {
+  async deleteUser(req: Request, res: Response) {
     const { id } = req.params;
-    const user = await userService.findUserByIdService(Number(id));
+    const user = await userService.findUserById(Number(id));
 
     if (!user) {
       throw new NotFound("User not found");
     }
 
-    await userService.deleteUserService(Number(id));
+    await userService.deleteUser(Number(id));
 
     return res.status(200).send({ message: "User deleted successfully" });
+  }
+
+  async countUser(req: Request, res: Response) {
+    const total = await userService.countUser();
+    return res.status(200).send({ total });
   }
 }
 

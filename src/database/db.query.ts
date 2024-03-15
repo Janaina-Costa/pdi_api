@@ -12,6 +12,8 @@ const query = {
     "UPDATE tb_user SET name = @name, email = @email, image = @image, password = Convert(varbinary(100),@password), updatedAt = @updatedAt WHERE id = @id",
 
   delete: "DELETE FROM tb_user WHERE id = @id",
+
+  countUser: "SELECT COUNT(*) AS totalUser FROM tb_user",
 };
 
 export default query;

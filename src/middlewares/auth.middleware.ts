@@ -42,7 +42,7 @@ export const authMiddleware = (
 
       const { id } = decoded as IJWTPayload;
 
-      const user: IUser = await userService.findUserByIdService(id);
+      const user: IUser = await userService.findUserById(id);
 
       if (!user) {
         return res.status(401).send({ message: "User unauthorized" });

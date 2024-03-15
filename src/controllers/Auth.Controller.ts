@@ -8,9 +8,9 @@ import { BadRequestError } from "errors/ApiErrors";
 const secret = SECRET_KEY;
 
 class AuthUserController {
-  async loginUserController(req: Request, res: Response) {
+  async loginUser(req: Request, res: Response) {
     const user: IUser = req.body;
-    const userData = await userAuthenticateService.loginService(user.email);
+    const userData = await userAuthenticateService.login(user.email);
 
     if (!user.email || user.email !== userData?.email) {
       throw new BadRequestError("Email or password invalid");
@@ -35,7 +35,7 @@ class AuthUserController {
       image: userData.image,
     };
 
-    const token = await userAuthenticateService.generateTokenService(
+    const token = await userAuthenticateService.generateToken(
       userData.id,
       secret,
     );

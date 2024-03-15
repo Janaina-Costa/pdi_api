@@ -2,33 +2,38 @@ import { UserRepository } from "repositories/User.Repository";
 import { IUser } from "types/interfaces/user";
 
 class UserService {
-  async findUsersService() {
+  async findUsers() {
     const client = new UserRepository();
-    return await client.findAllUsersRepository();
+    return await client.findAllUsers();
   }
 
-  async findUserByIdService(id: number) {
+  async findUserById(id: number) {
     const client = new UserRepository();
-    return await client.findUserByIdRepository(id);
+    return await client.findUserById(id);
   }
-  async findUserByEmailService(email: string) {
+  async findUserByEmail(email: string) {
     const client = new UserRepository();
-    return await client.findOneUserRepository(email);
-  }
-
-  async createUerService({ ...props }: IUser) {
-    const client = new UserRepository();
-    return await client.createUserRepository({ ...props });
+    return await client.findOneUser(email);
   }
 
-  async updateUserService(id: number, { ...props }: IUser) {
+  async createUer({ ...props }: IUser) {
     const client = new UserRepository();
-    return await client.updateUserRepository(id, { ...props });
+    return await client.createUser({ ...props });
   }
 
-  async deleteUserService(id: number) {
+  async updateUser(id: number, { ...props }: IUser) {
     const client = new UserRepository();
-    return await client.deleteUserRepository(id);
+    return await client.updateUser(id, { ...props });
+  }
+
+  async deleteUser(id: number) {
+    const client = new UserRepository();
+    return await client.deleteUser(id);
+  }
+
+  async countUser() {
+    const client = new UserRepository();
+    return await client.countUser();
   }
 }
 

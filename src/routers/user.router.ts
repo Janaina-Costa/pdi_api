@@ -8,23 +8,17 @@ import {
 
 const router = Router();
 
-router.get("/users", userController.findUsersController);
-router.get("/user/:id", authMiddleware, userController.findUserByIdController);
-router.post(
-  "/user",
-  userValidationMiddleware,
-  userController.createUserController,
-);
+router.get("/users", userController.findUsers);
+router.get("/user/:id", authMiddleware, userController.findUserById);
+router.post("/user", userValidationMiddleware, userController.createUser);
 router.put(
   "/user/update/:id",
   authMiddleware,
   validateUserUpdateMiddleware,
-  userController.updateUserController,
+  userController.updateUser,
 );
-router.delete(
-  "/user/delete/:id",
-  authMiddleware,
-  userController.deleteUserController,
-);
+router.delete("/user/delete/:id", authMiddleware, userController.deleteUser);
+
+router.get("/count", userController.countUser);
 
 export default router;

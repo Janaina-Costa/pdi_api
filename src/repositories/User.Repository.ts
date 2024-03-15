@@ -2,14 +2,14 @@ import { connectDataBase, dbSql } from "database/db";
 import query from "database/db.query";
 
 export class UserRepository {
-  async findAllUsersRepository(): Promise<User[]> {
+  async findAllUsers(): Promise<User[]> {
     const pool = await connectDataBase();
     const result = await pool?.query(query.findAll);
 
     return result?.recordset || [];
   }
 
-  async findUserByIdRepository(id: number): Promise<User> {
+  async findUserById(id: number): Promise<User> {
     const pool = await connectDataBase();
     const result: any = await pool
       ?.request()
@@ -19,7 +19,7 @@ export class UserRepository {
     return result?.recordsets[0][0];
   }
 
-  async findOneUserRepository(email: string): Promise<User> {
+  async findOneUser(email: string): Promise<User> {
     const pool = await connectDataBase();
     const result = await pool
       ?.request()
@@ -29,7 +29,7 @@ export class UserRepository {
     return result?.recordset[0];
   }
 
-  async createUserRepository(user: User): Promise<any> {
+  async createUser(user: User): Promise<any> {
     const pool = await connectDataBase();
     await pool
       ?.request()
@@ -42,7 +42,7 @@ export class UserRepository {
     return { ...user };
   }
 
-  async updateUserRepository(id: number, user: User) {
+  async updateUser(id: number, user: User) {
     const pool = await connectDataBase();
     await pool
       ?.request()
@@ -57,8 +57,15 @@ export class UserRepository {
     return { ...user };
   }
 
-  async deleteUserRepository(id: number) {
+  async deleteUser(id: number) {
     const pool = await connectDataBase();
     await pool?.request().input("id", dbSql.Int, id).query(query.delete);
+  }
+
+  async countUser() {
+    const pool = await connectDataBase();
+    const result = await pool?.query(query.countUser);
+
+    return result?.recordset[0].totalUser;
   }
 }
